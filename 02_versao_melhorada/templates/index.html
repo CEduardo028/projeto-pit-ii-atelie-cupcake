@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ateliê Cupcake | Cardápio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#inicio">✿ <span>Ateliê Cupcake</span></a>
+    <nav class="top-actions" aria-label="Navegação principal">
+      <a href="#cardapio">Cardápio</a>
+      <button class="orders-button" id="abrirPedidos" type="button">Pedidos</button>
+      <button class="cart-button" id="abrirCarrinho" type="button">🛒 Carrinho <span id="contadorCarrinho">0</span></button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div><span class="eyebrow">CONFEITARIA ARTESANAL</span><h1>Um doce momento<br>começa aqui.</h1>
+        <p>Escolha seus sabores favoritos e monte seu pedido.</p><a class="cta" href="#cardapio">Explorar cardápio</a></div>
+      <div class="hero-art" aria-hidden="true">🧁</div>
+    </section>
+
+    <section id="cardapio" class="menu-section">
+      <div class="section-head"><div><span class="eyebrow">FEITO COM CARINHO</span><h2>Nosso cardápio</h2></div><span class="muted">Encontre seu sabor favorito</span></div>
+      <div class="filters">
+        <label class="search-box"><span>⌕</span><input id="buscaSabor" type="search" placeholder="Buscar sabor..." aria-label="Buscar sabor"></label>
+        <div class="category-filters" id="filtrosCategoria">
+          <button class="filter active" data-categoria="Todas" type="button">Todas</button>
+          {% for categoria in categorias %}<button class="filter" data-categoria="{{ categoria }}" type="button">{{ categoria }}</button>{% endfor %}
+        </div>
+      </div>
+      <div class="produtos" id="listaProdutos">
+        {% for p in produtos %}
+        <article class="produto" data-nome="{{ p.nome|lower }}" data-categoria="{{ p.categoria }}">
+          <div class="emoji">{{ p.emoji }}</div><span class="categoria">{{ p.categoria }}</span><h3>{{ p.nome }}</h3><p>{{ p.descricao }}</p>
+          <div class="produto-footer"><strong>R$ {{ '%.2f'|format(p.preco) }}</strong><button type="button" onclick="adicionar({{ p.id }})">Adicionar +</button></div>
+        </article>
+        {% endfor %}
+      </div>
+      <p class="empty-state" id="semResultados" hidden>Nenhum sabor encontrado. Tente outra busca ou categoria.</p>
+    </section>
+
+    <section class="screen" id="telaCarrinho" hidden>
+      <div class="screen-heading"><div><span class="eyebrow">SEU PEDIDO</span><h2>Carrinho</h2></div><button class="text-button" type="button" data-voltar>← Voltar ao cardápio</button></div>
+      <div class="cart-layout">
+        <section class="panel cart-panel"><div id="itensCarrinho"></div><div class="cart-empty" id="carrinhoVazio">Seu carrinho está vazio. Escolha seus sabores no cardápio.</div></section>
+        <aside class="panel summary-panel"><h3>Resumo do pedido</h3><div class="total"><span>Total</span><strong id="totalCarrinho">R$ 0,00</strong></div>
+          <form id="checkoutForm">
+            <label>Nome completo<input id="cliente" placeholder="Como podemos chamar você?" required minlength="3"></label>
+            <label>Telefone<input id="telefone" type="tel" placeholder="(00) 00000-0000" required></label>
+            <label>Observações <span class="optional">(opcional)</span><textarea id="observacao" rows="3" maxlength="500" placeholder="Algum detalhe ou pedido especial?"></textarea></label>
+            <button class="primary" type="submit">Finalizar pedido</button><p id="mensagem" role="status" aria-live="polite"></p>
+          </form>
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen" id="telaPedidos" hidden>
+      <div class="screen-heading"><div><span class="eyebrow">ACOMPANHAMENTO</span><h2>Pedidos registrados</h2><p class="muted">Histórico salvo neste navegador.</p></div><button class="text-button" type="button" data-voltar>← Voltar ao cardápio</button></div>
+      <div class="panel history-panel" id="historicoLista"></div>
+    </section>
+    <footer>Ateliê Cupcake · Demonstração acadêmica</footer>
+  </main>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

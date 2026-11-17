@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cupcakes Gourmet</title><link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
+<body><header><h1>☁ Cupcakes Gourmet</h1><p>Pequenos momentos, grandes sabores.</p></header>
+<main><section><h2>Nosso cardápio</h2><div class="produtos">
+{% for p in produtos %}<article class="produto"><div class="emoji">{{ p.emoji }}</div><h3>{{ p.nome }}</h3><p>{{ p.descricao }}</p><strong>R$ {{ '%.2f'|format(p.preco) }}</strong><button onclick="adicionar({{ p.id }})">Adicionar</button></article>{% endfor %}
+</div></section>
+<section class="pedido"><h2>Meu pedido</h2><div id="itens"></div><p id="total">Total: R$ 0,00</p>
+<form id="checkout"><label>Nome <input id="cliente" required></label><label>Telefone <input id="telefone" required></label><button type="submit">Finalizar pedido</button></form><p id="mensagem"></p></section>
+<section><h2>Pedidos registrados neste navegador</h2><div id="historico"></div></section></main>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script></body></html>
